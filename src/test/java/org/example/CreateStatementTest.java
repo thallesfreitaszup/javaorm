@@ -14,6 +14,6 @@ public class CreateStatementTest {
         user.setName("thalles");
         user.setId("1");
         String statement = Parser.parseStatement(new CreateStatementParser(), user);
-        Assert.assertEquals("INSERT INTO UserTest(id, name, age) VALUES(1, thalles, 20)", statement);
+        Assert.assertEquals("INSERT INTO UserTest(id, name, age) VALUES ('1', 'thalles', '20')", statement);
     }
 }
