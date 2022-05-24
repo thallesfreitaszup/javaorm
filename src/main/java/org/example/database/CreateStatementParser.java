@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CreateStatementParser implements StatementParser {
-    private String[] keys = {"INSERT", "VALUES"};
-
+    private String[] keys = {"INSERT", "INTO", "VALUES"};
+    private String SpaceDelimiter = " ";
 
     @Override
     public String parse(Object object) {
@@ -19,10 +19,15 @@ public class CreateStatementParser implements StatementParser {
         StringBuilder statement = new StringBuilder();
 
         for(String key : keys ) {
-            if (key.equals("INSERT")) {
-                statement.append(String.format("%s %s %s%s ", key, "INTO", name, getKeysStatement(keyValueFields)));
-            }else {
-                statement.append(String.format("%s %s", key, getValuesStatement(keyValueFields)));
+            statement.append(key);
+            statement.append(SpaceDelimiter);
+            if (key.equals("INTO")) {
+                statement.append(name);
+                statement.append(getKeysStatement(keyValueFields));
+                statement.append(SpaceDelimiter);
+            }
+            if (key.equals("VALUES")) {
+                statement.append(getValuesStatement(keyValueFields));
             }
         }
         return statement.toString();
