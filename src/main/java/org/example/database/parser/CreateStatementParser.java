@@ -1,4 +1,6 @@
-package org.example.database;
+package org.example.database.parser;
+
+import org.example.database.reflection.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
@@ -7,11 +9,10 @@ import java.util.stream.Collectors;
 
 public class CreateStatementParser implements StatementParser {
     private String[] keys = {"INSERT", "INTO", "VALUES"};
-    private String SpaceDelimiter = " ";
 
     @Override
     public String parse(Object object) {
-        Map<String,Object> keyValueFields  = parseObject(object);
+        Map<String,Object> keyValueFields  = ReflectionUtils.getKeyValuesMap(object);
         return createStatement(keyValueFields, object.getClass().getSimpleName());
     }
 
@@ -20,11 +21,11 @@ public class CreateStatementParser implements StatementParser {
 
         for(String key : keys ) {
             statement.append(key);
-            statement.append(SpaceDelimiter);
+            statement.append(ParserConstants.SPACE_DELIMITER);
             if (key.equals("INTO")) {
                 statement.append(name);
                 statement.append(getKeysStatement(keyValueFields));
-                statement.append(SpaceDelimiter);
+                statement.append(ParserConstants.SPACE_DELIMITER);
             }
             if (key.equals("VALUES")) {
                 statement.append(getValuesStatement(keyValueFields));
@@ -41,19 +42,5 @@ public class CreateStatementParser implements StatementParser {
         return keys.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.joining(", ","(", ")"));
     }
 
-    private Map<String,Object> parseObject(Object object) {
-        try {
-            Class objectClass = Class.forName(object.getClass().getName());
-            Field[] fields = objectClass.getDeclaredFields();
-            Map<String, Object> keyValueFields = new LinkedHashMap<>();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object value  = field.get(object);
-                keyValueFields.put(field.getName(),value);
-            }
-            return keyValueFields;
-        }catch (Exception e ) {
-            throw new RuntimeException("Failed to parse object: "+ e.getMessage());
-        }
-    }
+
 }

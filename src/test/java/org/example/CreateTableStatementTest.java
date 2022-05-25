@@ -1,8 +1,7 @@
 package org.example;
 
-import org.example.database.CreateStatementParser;
-import org.example.database.CreateTableStatementParser;
-import org.example.database.Parser;
+import org.example.database.parser.CreateTableStatementParser;
+import org.example.database.parser.Parser;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,11 +1,12 @@
 package org.example;
 
 import org.example.database.parser.CreateStatementParser;
+import org.example.database.parser.FindStatementParser;
 import org.example.database.parser.Parser;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CreateStatementTest {
+public class FindStatementTest {
 
     @Test
     public void CreateObjectStatementTest() {
@@ -13,7 +14,7 @@ public class CreateStatementTest {
         user.setAge("20");
         user.setName("thalles");
         user.setId("1");
-        String statement = Parser.parseStatement(new CreateStatementParser(), user);
-        Assert.assertEquals("INSERT INTO UserTest(id, name, age) VALUES ('1', 'thalles', '20')", statement);
+        String statement = Parser.parseStatement(new FindStatementParser(), user);
+        Assert.assertEquals("SELECT id, name, age FROM UserTest", statement);
     }
 }

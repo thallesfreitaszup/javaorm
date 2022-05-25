@@ -1,6 +1,10 @@
 package org.example.database;
 
-import javax.xml.transform.Result;
+import org.example.database.parser.CreateStatementParser;
+import org.example.database.parser.CreateTableStatementParser;
+import org.example.database.parser.FindStatementParser;
+import org.example.database.parser.Parser;
+
 import java.sql.*;
 
 public class DB {
@@ -33,8 +37,8 @@ public class DB {
         System.out.println(result);
     }
 
-    public ResultSet Find(Object userTest) throws SQLException {
-        String statement = "SELECT * from userTest";
+    public ResultSet Find(Object object) throws SQLException {
+        String statement = Parser.parseStatement(new FindStatementParser(), object);
 
         ResultSet resultSet = this.statement.executeQuery(statement);
         if (!resultSet.next()) {

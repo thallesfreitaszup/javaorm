@@ -1,4 +1,4 @@
-package org.example.database;
+package org.example.database.parser;
 
 public interface StatementParser {
 
